@@ -17,6 +17,7 @@ const buildRequest = (url) => {
     headers.append("Authorization", `Bearer ${getSpotifyToken()}`);
     return new Request(url, {headers})
 }
+
 const getCurrentUserInfo = async _ => {
     const url = 'https://api.spotify.com/v1/me';
     const res = await fetch(buildRequest(url));
