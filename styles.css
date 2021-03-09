@@ -1,0 +1,71 @@
+.container {
+    display: flex;
+    box-sizing: border-box;
+    /*align-items: center;*/
+    width: 100%;
+}
+
+.block-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 20%;
+}
+
+#busqueda-input{
+    flex: 8;
+}
+
+#busqueda-btn{
+    flex: 2;
+}
+
+.table{
+    width: 80%;
+    padding: 2% 20%;
+}
+
+.row{
+    flex-direction: row;
+    /*align-items: center;*/
+    display: flex;
+    width: 100%;
+    padding: 2% 0;
+}
+
+.cell.img{
+    flex: 2
+}
+
+.cell.nombre{
+    flex: 8;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /*height: 100%;*/
+}
+
+.cell.nombre > .nombre {
+    flex: 2;
+    display: flex;
+    align-items: center;
+}
+
+.cell.nombre > .descripcion {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    font-size: 0.8em;
+}
+
+.cell.publisher{
+    flex: 3;
+}
+
+.cell.episodios{
+    flex: 2;
+}
+
+.cell.play,.cell.play-in-spotify{
+    flex: 1;
+}
