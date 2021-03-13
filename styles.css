@@ -69,3 +69,25 @@
 .cell.play,.cell.play-in-spotify{
     flex: 1;
 }
+
+#askLogin.container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20%;
+    background-color: aqua;
+}
+
+#askLogin.container > div, #askLogin.container > input{
+    margin: 5%;
+    font-size: 2em;
+}
+
+.authtext {
+    display: flex;
+    align-items: center;
+}
+
+.authtext > h2 {
+    display: flex;
+    align-items: center;
+}

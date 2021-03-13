@@ -36,16 +36,30 @@ const search = async input => {
     return await res.json();
 }
 
-const create = ({tag, clases, children, attributes, textContent}) => {
+const getRandomEpisode = async (id, totalEpisodios) => {
+    const random = parseInt(Math.random() * 100000 % totalEpisodios);
+    const url = `https://api.spotify.com/v1/shows/6C4MdNWQSPhmzBlIVau30e/episodes?limit=1&${random != 0 ? `offset=${random}` : ``}`;
+    const res = await fetch(buildRequest(url));
+    return await res.json();
+}
+
+const create = ({tag, clases, children, attributes, textContent, events}) => {
     let el = document.createElement(tag);
     clases && clases.forEach(clase => el.classList.add(clase));
     children && children.forEach(child => el.append(create(child)));
     attributes && Object.keys(attributes).forEach(attrKey => el.setAttribute(attrKey, attributes[attrKey]));
     textContent && (el.textContent = textContent);
+    events && Object.keys(events).forEach(event => {
+        el.addEventListener(event, events[event])
+    })
     return el
 }
 
-const addListRow = ({name, description, imgSrc, publisher, episodes, spotifyUri}) => {
+const playRandomEpisode = async (id, totalEpisodios) => {
+    const res = await getRandomEpisode(id, totalEpisodios);
+    open(res.items[0].uri)
+}
+const addListRow = ({name, description, imgSrc, publisher, episodes, spotifyUri, id}) => {
     let el = create({
         tag : "div",
         clases : ["row"],
@@ -89,7 +103,18 @@ const addListRow = ({name, description, imgSrc, publisher, episodes, spotifyUri}
             {
                 tag: "div",
                 clases: ["cell", "play-in-spotify"],
-                children : [ { tag: "href", textContent: "Abrir en spotify", attributes: {src: spotifyUri} }]
+                children : [ 
+                    { 
+                        tag: "span", 
+                        textContent: "Abrir en spotify", 
+                        attributes: {
+                            /*src: spotifyUri,*/
+                        },
+                        events: {
+                            click: ev => playRandomEpisode(id, episodes)
+                        }
+                    }
+                ]
             }
         ]
     });
@@ -101,10 +126,10 @@ const emptyList = _ => {
     [...TABLA.children].forEach(child => TABLA.removeChild(child))
 }
 
-const setEvents = _ =>{
-    window.TABLA = document.querySelector("div.table");
-    window.BUSQUEDA_BTN = document.querySelector("#busqueda-btn");
-    window.BUSQUEDA_INPUT = document.querySelector("#busqueda-input");
+const setEvents = _ => {
+    autorizar.addEventListener("click", ev => {
+        window.location = "https://accounts.spotify.com/authorize?client_id=76fb0a13403d4147b10d78950a9fe7d2&redirect_uri=https%3A%2F%2Flautaroh2394.github.io&response_type=token";
+    })
 
     BUSQUEDA_BTN.addEventListener("click", async ev => {
         emptyList();
@@ -124,8 +149,18 @@ const setEvents = _ =>{
                 episodes: podcast.total_episodes,
                 imgSrc: podcast.images.reduce((prev,curr) => curr.height < prev.height ? curr : prev).url,
                 publisher: podcast.publisher,
-                spotifyUri: podcast.uri
+                spotifyUri: podcast.uri,
+                id: podcast.id
             })
         })
     })
+}
+
+const startPage = _ =>{
+    window.TABLA = document.querySelector("div.table");
+    window.BUSQUEDA_BTN = document.querySelector("#busqueda-btn");
+    window.BUSQUEDA_INPUT = document.querySelector("#busqueda-input");
+    
+    setEvents();
+    pageView.start();
 }
