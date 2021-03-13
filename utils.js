@@ -38,7 +38,7 @@ const search = async input => {
 
 const getRandomEpisode = async (id, totalEpisodios) => {
     const random = parseInt(Math.random() * 100000 % totalEpisodios);
-    const url = `https://api.spotify.com/v1/shows/6C4MdNWQSPhmzBlIVau30e/episodes?limit=1&${random != 0 ? `offset=${random}` : ``}`;
+    const url = `https://api.spotify.com/v1/shows/${id}/episodes?limit=1&${random != 0 ? `offset=${random}` : ``}`;
     const res = await fetch(buildRequest(url));
     return await res.json();
 }
@@ -109,12 +109,12 @@ const addListRow = ({name, description, imgSrc, publisher, episodes, spotifyUri,
                         textContent: "Abrir en spotify", 
                         attributes: {
                             /*src: spotifyUri,*/
-                        },
-                        events: {
-                            click: ev => playRandomEpisode(id, episodes)
                         }
                     }
-                ]
+                ],
+                events: {
+                    click: ev => playRandomEpisode(id, episodes)
+                }
             }
         ]
     });
