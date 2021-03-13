@@ -95,20 +95,21 @@ const addListRow = ({name, description, imgSrc, publisher, episodes, spotifyUri,
                 clases: ["cell", "episodios"],
                 children : [ { tag: "h4", textContent: episodes }]
             },
-            {
+            /*{
                 tag: "div",
                 clases: ["cell", "play"],
                 children : [ { tag: "h4", textContent: "Elegir" }]
-            },
+            },*/
             {
                 tag: "div",
                 clases: ["cell", "play-in-spotify"],
                 children : [ 
                     { 
-                        tag: "span", 
-                        textContent: "Abrir en spotify", 
+                        tag: "img", 
+                        /*textContent: "Abrir en spotify",*/
+                        clases: ["sm-click-img"],
                         attributes: {
-                            /*src: spotifyUri,*/
+                            src: "random.png",
                         }
                     }
                 ],
@@ -154,13 +155,23 @@ const setEvents = _ => {
             })
         })
     })
+
+    BUSQUEDA_INPUT.addEventListener("keydown", ev => {
+        ev.keyCode == 13 && BUSQUEDA_BTN.click()
+    })
 }
 
-const startPage = _ =>{
+const startPage = (test = false) =>{
     window.TABLA = document.querySelector("div.table");
     window.BUSQUEDA_BTN = document.querySelector("#busqueda-btn");
     window.BUSQUEDA_INPUT = document.querySelector("#busqueda-input");
     
     setEvents();
     pageView.start();
+
+    if (test){
+        pageView.showSearch()
+        pageView.showBlockParent("[name=busqueda]");
+        addListRow({name:"adsdf", description:"adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf ", imgSrc:"https://i.scdn.co/image/9efc9c4c9c0d8a1c9290faf2686510eb57a891b0", publisher:"adsdf", episodes:"adsdf", spotifyUri:"adsdf"})
+    }
 }
