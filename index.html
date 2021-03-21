@@ -18,11 +18,29 @@
                 startPage(/*test=true*/)
             })
         </script>
+        <!--
         <div id="askLogin" class="container">
             <div class="authtext">
                 <h2>Necesito que autorices la app para poder mirar tus podcasts</h2>
             </div>
             <input id="autorizar" type="button" value="Autorizar">
+        </div>
+        -->
+        <div class="modal fade" id="authModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="authModalLabel">Autorización necesaria</h5>
+                        <!--<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+                    </div>
+                    <div class="modal-body">
+                        <h4>Necesito que autorices la aplicación para poder ver tus podcasts</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="autorizar">Autorizar</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="busqueda">
             <div class="input-group mb-3">

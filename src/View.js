@@ -8,8 +8,8 @@ const pageView = {
         }
     },
     askLogin: _ => {
-        pageView.hideAllBlocks();
-        pageView.show("#askLogin");
+        pageView.showSearch();
+        pageView.showAuth();
     },
     showSearch: _=> {
         pageView.hideAllBlocks();
@@ -20,6 +20,14 @@ const pageView = {
         [...document.querySelectorAll("body > div")].forEach(block => {
             block.style.display = "none"
         })
+    },
+    showAuth: mje => {
+        mje && (document.querySelector("#authModal > .modal-dialog > modal-content > .modal-body").textContent = mje);
+        let authModal = new bootstrap.Modal(document.getElementById('authModal'), {
+            keyboard: false,
+            backdrop: "static"
+        })
+        authModal.show()
     },
     showError: error =>{
         //TODO - Show error y volver a loguearse
