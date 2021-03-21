@@ -9,14 +9,15 @@ const pageView = {
     },
     askLogin: _ => {
         pageView.hideAllBlocks();
-        pageView.showBlockParent("#askLogin");
+        pageView.show("#askLogin");
     },
     showSearch: _=> {
         pageView.hideAllBlocks();
-        pageView.showBlockParent("[name=busqueda]");
+        pageView.show("#busqueda");
+        pageView.show("#resultados")
     },
     hideAllBlocks: _=>{
-        [...document.querySelectorAll(".block-container")].forEach(block => {
+        [...document.querySelectorAll("body > div")].forEach(block => {
             block.style.display = "none"
         })
     },
@@ -24,7 +25,7 @@ const pageView = {
         //TODO - Show error y volver a loguearse
         console.log(error)
     },
-    showBlockParent: sel => {
-        document.querySelector(sel).parentElement.style.display = "flex";
+    show: sel => {
+        document.querySelector(sel).style.display = "";
     }
 }
