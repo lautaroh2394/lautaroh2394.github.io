@@ -1,0 +1,4 @@
+todo:
+padding sup en el input de busqueda
+mejorar pantalla de autorizacion
+escribir readme
