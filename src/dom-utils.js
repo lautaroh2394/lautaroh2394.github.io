@@ -201,7 +201,7 @@ const setEvents = _ => {
         let val = BUSQUEDA_INPUT.value;
         const res = await search(val);
         if (res.error){
-            page.showAuth(res.error);
+            page.showAuth(res.error.message);
             return;
         }
         

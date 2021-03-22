@@ -40,7 +40,7 @@ const getRandomEpisode = async (id, totalEpisodios) => {
 const playRandomEpisode = async (id, totalEpisodios) => {
     const res = await getRandomEpisode(id, totalEpisodios);
     if (res.error){
-        page.showAuth(res.error);
+        page.showAuth(res.error.message);
         return;
     }
     open(res.items[0].uri)
