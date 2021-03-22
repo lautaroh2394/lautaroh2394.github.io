@@ -1,48 +1,3 @@
-const getSpotifyParams = _ => {
-    if (window.Params) return Params;
-
-    const regex = RegExp(`https?:\/\/${window.location.host}/?#`);
-    const spotifyParams = window.location.toString().replace(regex,"");
-    window.Params = spotifyParams.split("&").map(param => param.split("=")).reduce( (prev, curr) => {
-        prev[curr[0]] = curr[1]
-        return prev
-    }, {})
-    return Params;
-}
-
-const getSpotifyToken = _ => getSpotifyParams().access_token;
-
-const buildRequest = (url) => {
-    const headers = new Headers();
-    headers.append("Authorization", `Bearer ${getSpotifyToken()}`);
-    return new Request(url, {headers})
-}
-
-const getCurrentUserInfo = async _ => {
-    const url = 'https://api.spotify.com/v1/me';
-    const res = await fetch(buildRequest(url));
-    return await res.json();
-}
-
-const estoyAutorizado = _ => !!getSpotifyToken()
-
-const getSearchParams = input => {
-    return `?q=${encodeURI(input)}&type=show`;
-}
-
-const search = async input => {
-    const url = 'https://api.spotify.com/v1/search' + getSearchParams(input);
-    const res = await fetch(buildRequest(url));
-    return await res.json();
-}
-
-const getRandomEpisode = async (id, totalEpisodios) => {
-    const random = parseInt(Math.random() * 100000 % totalEpisodios);
-    const url = `https://api.spotify.com/v1/shows/${id}/episodes?limit=1&${random != 0 ? `offset=${random}` : ``}`;
-    const res = await fetch(buildRequest(url));
-    return await res.json();
-}
-
 const create = ({tag, clases, children, attributes, textContent, events}) => {
     let el = document.createElement(tag);
     clases && clases.forEach(clase => el.classList.add(clase));
@@ -53,11 +8,6 @@ const create = ({tag, clases, children, attributes, textContent, events}) => {
         el.addEventListener(event, events[event])
     })
     return el
-}
-
-const playRandomEpisode = async (id, totalEpisodios) => {
-    const res = await getRandomEpisode(id, totalEpisodios);
-    open(res.items[0].uri)
 }
 
 const addListRow = ({name, description, imgSrc, publisher, episodes, spotifyUri, id, nroFila}) => {
@@ -246,11 +196,12 @@ const setEvents = _ => {
 
     BUSQUEDA_BTN.addEventListener("click", async ev => {
         emptyList();
+        page.showLoading();
     
         let val = BUSQUEDA_INPUT.value;
         const res = await search(val);
         if (res.error){
-            pageView.showError(res.error);
+            page.showError(res.error);
             return;
         }
         
@@ -267,6 +218,8 @@ const setEvents = _ => {
                 nroFila: prev
             })
         }, 1)
+
+        page.hideLoading();
     })
 
     BUSQUEDA_INPUT.addEventListener("keydown", ev => {
@@ -274,16 +227,10 @@ const setEvents = _ => {
     })
 }
 
-const startPage = (test = false) =>{
+const startPage = _ =>{
     window.BUSQUEDA_BTN = document.querySelector("#busqueda-btn");
     window.BUSQUEDA_INPUT = document.querySelector("#busqueda-input");
     
     setEvents();
-    pageView.start();
-
-    if (test){
-        pageView.showSearch()
-        pageView.showBlockParent("[name=busqueda]");
-        addListRow({name:"adsdf", description:"adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf adsdf ", imgSrc:"https://i.scdn.co/image/9efc9c4c9c0d8a1c9290faf2686510eb57a891b0", publisher:"adsdf", episodes:"adsdf", spotifyUri:"adsdf"})
-    }
+    page.start();
 }

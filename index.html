@@ -5,33 +5,24 @@
         <title>Podcast Randomizer</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!--<link rel="stylesheet" href="styles/styles.css">-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-        <link rel="stylesheet" href="styles/styles_v2.css">
+        <link rel="stylesheet" href="styles/styles.css">
 
     </head>
     <body>
-        <script async defer src="src/utils.js"></script>
-        <script async defer src="src/View.js"></script>
+        <script async defer src="src/dom-utils.js"></script>
+        <script async defer src="src/spotify-utils.js"></script>
+        <script async defer src="src/view.js"></script>
         <script async defer>
             window.addEventListener("load", ev => {
-                startPage(/*test=true*/)
+                startPage()
             })
         </script>
-        <!--
-        <div id="askLogin" class="container">
-            <div class="authtext">
-                <h2>Necesito que autorices la app para poder mirar tus podcasts</h2>
-            </div>
-            <input id="autorizar" type="button" value="Autorizar">
-        </div>
-        -->
         <div class="modal fade" id="authModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="authModalLabel">Autorización necesaria</h5>
-                        <!--<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
                     </div>
                     <div class="modal-body">
                         <h4>Necesito que autorices la aplicación para poder ver tus podcasts</h4>
@@ -47,8 +38,11 @@
                 <input type="text" class="form-control" 
                 placeholder="Ingresar podcast" aria-label="Podcast" 
                 aria-describedby="busqueda-btn" id="busqueda-input">
-                <button class="btn btn-outline-secondary" type="button" id="busqueda-btn">Button</button>
+                <button class="btn btn-outline-secondary" type="button" id="busqueda-btn">Buscar</button>
             </div>
+        </div>
+        <div id="loading" class="flex-center">
+            <img src="assets/loading-spinner.gif" alt="">
         </div>
         <div class="accordion" id="resultados">
         </div>

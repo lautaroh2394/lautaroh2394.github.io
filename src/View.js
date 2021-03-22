@@ -1,25 +1,38 @@
-const pageView = {
+const page = {
     start: _ => {
+        page.hideAllBlocks();
+        page.showLoading();
+        
         if (!estoyAutorizado()){
-            pageView.askLogin()
+            page.askLogin()
         }
         else{
-            pageView.showSearch()
+            page.showSearch()
         }
     },
     askLogin: _ => {
-        pageView.showSearch();
-        pageView.showAuth();
+        page.showSearch();
+        page.showAuth();
     },
     showSearch: _=> {
-        pageView.hideAllBlocks();
-        pageView.show("#busqueda");
-        pageView.show("#resultados")
+        page.hideAllBlocks();
+        page.show("#busqueda");
+        page.show("#resultados")
+    },
+    showLoading: _=>{
+        page.show("#loading");
+    },
+    hideLoading:_=>{
+        let loading = document.getElementById("loading");
+        page.hide(loading);
     },
     hideAllBlocks: _=>{
         [...document.querySelectorAll("body > div")].forEach(block => {
-            block.style.display = "none"
+            page.hide(block)
         })
+    },
+    hide: block =>{
+        block.style.display = "none"
     },
     showAuth: mje => {
         mje && (document.querySelector("#authModal > .modal-dialog > modal-content > .modal-body").textContent = mje);
@@ -28,10 +41,6 @@ const pageView = {
             backdrop: "static"
         })
         authModal.show()
-    },
-    showError: error =>{
-        //TODO - Show error y volver a loguearse
-        console.log(error)
     },
     show: sel => {
         document.querySelector(sel).style.display = "";
