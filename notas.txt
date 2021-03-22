@@ -1,4 +1,7 @@
 todo:
-padding sup en el input de busqueda
-mejorar pantalla de autorizacion
-escribir readme
+agregar link a github en footer
+agregar guardados:
+    service worker
+    guardar todas las uris para los episodios de unpodcast
+    configurar para guardar como app
+    
