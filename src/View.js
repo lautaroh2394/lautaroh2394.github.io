@@ -35,7 +35,7 @@ const page = {
         block.style.display = "none"
     },
     showAuth: mje => {
-        mje && (document.querySelector("#authModal > .modal-dialog > modal-content > .modal-body").textContent = mje);
+        mje && (document.querySelector("#authModal > .modal-dialog > .modal-content > .modal-body").textContent = mje);
         let authModal = new bootstrap.Modal(document.getElementById('authModal'), {
             keyboard: false,
             backdrop: "static"
