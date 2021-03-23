@@ -27,7 +27,7 @@ const page = {
         page.hide(loading);
     },
     hideAllBlocks: _=>{
-        [...document.querySelectorAll("body > div")].forEach(block => {
+        [...document.querySelectorAll("body > #container > div")].forEach(block => {
             page.hide(block)
         })
     },

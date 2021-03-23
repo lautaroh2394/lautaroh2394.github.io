@@ -92,3 +92,22 @@ h4, span{
 #loading {
     justify-content: center;
 }
+
+#container {
+    flex: 1;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#footer {
+    display: flex;
+    flex-shrink: 0;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3vw;
+}
