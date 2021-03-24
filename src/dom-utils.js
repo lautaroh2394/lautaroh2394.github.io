@@ -227,10 +227,25 @@ const setEvents = _ => {
     })
 }
 
+const setSW = _ =>{
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').then(function(registration) {
+            // Registration was successful
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+            // registration failed :(
+            console.log('ServiceWorker registration failed: ', err);
+        });
+
+        navigator.serviceWorker.addEventListener('message', console.log)
+    }
+}
+
 const startPage = _ =>{
     window.BUSQUEDA_BTN = document.querySelector("#busqueda-btn");
     window.BUSQUEDA_INPUT = document.querySelector("#busqueda-input");
     
     setEvents();
+    setSW();
     page.start();
 }

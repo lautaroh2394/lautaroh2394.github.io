@@ -1,7 +1,8 @@
 todo:
-agregar link a github en footer
 agregar guardados:
     service worker
-    guardar todas las uris para los episodios de unpodcast
+        - sw cachea assets y pantalla ✔
+        - mostrar en pantalla que no hay conexion
+        - guardar todas las uris para los episodios de un podcast
     configurar para guardar como app
-    
+
