@@ -14,11 +14,20 @@
         <script async defer src="src/dom-utils.js"></script>
         <script async defer src="src/spotify-utils.js"></script>
         <script async defer src="src/View.js"></script>
+        <script async defer src="src/idb-helper.js"></script>
         <script async defer>
             window.addEventListener("load", ev => {
                 startPage()
             })
         </script>
+        <div id="nointernet" style="display: none;" class="alert alert-dark" role="alert">
+            No hay conexión a internet
+        </div>
+        <div id="guardados" style="display: none;">
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary" type="button">Ver guardados</button>
+            </div>
+        </div>
         <div id="container">
             <div class="modal fade" id="authModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
                 <div class="modal-dialog">

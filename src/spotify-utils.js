@@ -37,8 +37,18 @@ const getRandomEpisode = async (id, totalEpisodios) => {
     return await res.json();
 }
 
-const playRandomEpisode = async (id, totalEpisodios) => {
-    const res = await getRandomEpisode(id, totalEpisodios);
+const getEpisode = async (id, nroEpisodio) => {
+    const url = `https://api.spotify.com/v1/shows/${id}/episodes?limit=1&offset=${nroEpisodio}`;
+    const res = await fetch(buildRequest(url));
+    return await res.json();
+}
+
+const playRandomEpisode = async ({name, description, imgSrc, publisher, episodes, spotifyUri, id}) => {
+    let totalEpisodios = episodes;
+    let podcastId = id;
+    saveEpisodeList({name, description, imgSrc, publisher, totalEpisodios, spotifyUri, podcastId});
+    
+    const res = await getRandomEpisode(podcastId, totalEpisodios);
     if (res.error){
         page.showAuth(res.error.message);
         return;

@@ -10,8 +10,9 @@ const create = ({tag, clases, children, attributes, textContent, events}) => {
     return el
 }
 
-const addListRow = ({name, description, imgSrc, publisher, episodes, spotifyUri, id, nroFila}) => {
-    nroFila = nroFila || "1"
+const addListRow = ({name, description, imgSrc, publisher, episodes, spotifyUri, id, nroFila, callback}) => {
+    callback = callback || (ev => playRandomEpisode({name, description, imgSrc, publisher, episodes, spotifyUri, id}));
+    nroFila = nroFila || "1";
     let el = create({
         tag: "div",
         clases: ["accordion-item"],
@@ -154,7 +155,7 @@ const addListRow = ({name, description, imgSrc, publisher, episodes, spotifyUri,
                                         },
                                         textContent: "Reproducir aleatorio",
                                         events: {
-                                            click: ev => playRandomEpisode(id, episodes)
+                                            click: callback
                                         }
                                     }
                                 ]
@@ -180,7 +181,6 @@ const addListRow = ({name, description, imgSrc, publisher, episodes, spotifyUri,
     }
 );
 
-    //ACCORDION.appendChild(el);
     resultados.appendChild(el);
     return (parseInt(nroFila) + 1).toString();
 }
@@ -225,19 +225,57 @@ const setEvents = _ => {
     BUSQUEDA_INPUT.addEventListener("keydown", ev => {
         ev.keyCode == 13 && BUSQUEDA_BTN.click()
     })
+
+    window.addEventListener("offline", ev => {
+        page.toggleOffline(ev.type)
+    })
+    window.addEventListener("online", ev => {
+        page.toggleOffline(ev.type)
+    })
+
+    guardados.addEventListener("click", ev => {
+        emptyList();
+        page.showLoading();
+
+        if (window.GUARDADOS){
+            //TODO: Debería de queriear a la idb en vez de guardarse al inicio de la pantalla
+            GUARDADOS.reduce((prev, podcast) => {
+                return addListRow({
+                    name: podcast.podcast_data.name,
+                    description: podcast.podcast_data.description,
+                    imgSrc: podcast.podcast_data.imgSrc,
+                    publisher: podcast.podcast_data.publisher,
+                    episodes: podcast.podcast_data.totalEpisodios,
+                    spotifyUri: podcast.podcast_data.spotifyUri,
+                    id: podcast.id,
+                    nroFila: prev,
+                    callback: ev => {
+                        //Open randomly from podcast.podcast_episodes
+                        const random = parseInt(Math.random() * 100000 % podcast.podcast_episodes.length);
+                        open(podcast.podcast_episodes[random])
+                    }
+                })
+            }, 1)
+    
+            page.hideLoading();
+        }
+    })
 }
 
 const setSW = _ =>{
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').then(function(registration) {
-            // Registration was successful
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }, function(err) {
-            // registration failed :(
-            console.log('ServiceWorker registration failed: ', err);
-        });
+        if (!navigator.serviceWorker.controller){
+            navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                // Registration was successful
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function(err) {
+                // registration failed :(
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        }
 
-        navigator.serviceWorker.addEventListener('message', console.log)
+        navigator.serviceWorker.addEventListener('message', processPostedMessage)
+        navigator.serviceWorker.controller.postMessage({execute:"check-saved"})
     }
 }
 

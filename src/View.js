@@ -23,8 +23,7 @@ const page = {
         page.show("#loading");
     },
     hideLoading:_=>{
-        let loading = document.getElementById("loading");
-        page.hide(loading);
+        page.hide("#loading");
     },
     hideAllBlocks: _=>{
         [...document.querySelectorAll("body > #container > div")].forEach(block => {
@@ -32,7 +31,12 @@ const page = {
         })
     },
     hide: block =>{
-        block.style.display = "none"
+        if (typeof block == "string"){
+            document.querySelector(block).style.display = "none"
+        }
+        else{
+            block.style.display = "none"
+        }
     },
     showAuth: mje => {
         mje && (document.querySelector("#authModal > .modal-dialog > .modal-content > .modal-body").textContent = mje);
@@ -44,5 +48,9 @@ const page = {
     },
     show: sel => {
         document.querySelector(sel).style.display = "";
+    },
+    toggleOffline: type => {
+        if (type == "offline") page.show("#nointernet");
+        else page.hide("#nointernet");
     }
 }
