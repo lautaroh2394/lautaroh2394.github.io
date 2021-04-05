@@ -238,7 +238,7 @@ const setEvents = _ => {
         page.showLoading();
 
         if (window.GUARDADOS){
-            //TODO: Debería de queriear a la idb en vez de guardarse al inicio de la pantalla
+            //TODO: Debería de queriear a la idb en vez de guardarse al inicio de la pantalla. O cada vez que se guarde un podcast, actualizar en el client la lista.
             GUARDADOS.reduce((prev, podcast) => {
                 return addListRow({
                     name: podcast.podcast_data.name,

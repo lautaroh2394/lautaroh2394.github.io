@@ -101,10 +101,12 @@ self.addEventListener("message", async event => {
                 
                 let dbQueryRequest = store.getAll();
                 dbQueryRequest.onsuccess = ev => {
-                    event.source.postMessage({
-                        "type": "saved-episodes",
-                        "podcast-list": ev.target.result
-                    })
+                    if (ev.target.result.length > 0){
+                        event.source.postMessage({
+                            "type": "saved-episodes",
+                            "podcast-list": ev.target.result
+                        })
+                    }
                 }
                 dbQueryRequest.onerror = ev => {
                     console.log("Error en la query", ev)
@@ -118,3 +120,4 @@ self.addEventListener("message", async event => {
             console.log(`No se pudo procesar el mensaje recibido en sw con atributo execute con valor ${event.data.execute}`)
     }
 })
+//TODO: Refactorear las llamadas a IDB, se repite mucho código

@@ -1,4 +1,5 @@
 const saveEpisodeList = async ({name, description, imgSrc, publisher, totalEpisodios, spotifyUri, podcastId}) => {
+    //TODO: Caso en que se quiera guardar un podcast ya guardado anteriormente
     let counter = 0
     let episodes = await Promise.all((new Array(totalEpisodios)).fill()
         .map(e=>counter++)
