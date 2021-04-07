@@ -4,5 +4,7 @@ agregar guardados:
         - sw cachea assets y pantalla ✔
         - mostrar en pantalla que no hay conexion
         - guardar todas las uris para los episodios de un podcast
+    client
+        - en caso de no internet los requests deberían cachearse y mostrar mensaje de error
     configurar para guardar como app
 

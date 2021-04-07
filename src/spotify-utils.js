@@ -12,9 +12,10 @@ const getSpotifyParams = _ => {
 
 const getSpotifyToken = _ => getSpotifyParams().access_token;
 
-const buildRequest = (url) => {
+const buildRequest = (url, token) => {
+    token = token || getSpotifyToken();
     const headers = new Headers();
-    headers.append("Authorization", `Bearer ${getSpotifyToken()}`);
+    headers.append("Authorization", `Bearer ${token}`);
     return new Request(url, {headers})
 }
 
@@ -37,9 +38,9 @@ const getRandomEpisode = async (id, totalEpisodios) => {
     return await res.json();
 }
 
-const getEpisode = async (id, nroEpisodio) => {
+const getEpisode = async (id, nroEpisodio, token) => {
     const url = `https://api.spotify.com/v1/shows/${id}/episodes?limit=1&offset=${nroEpisodio}`;
-    const res = await fetch(buildRequest(url));
+    const res = await fetch(buildRequest(url, token));
     return await res.json();
 }
 

@@ -1,5 +1,6 @@
 const saveEpisodeList = async ({name, description, imgSrc, publisher, totalEpisodios, spotifyUri, podcastId}) => {
     //TODO: Caso en que se quiera guardar un podcast ya guardado anteriormente
+    /*
     let counter = 0
     let episodes = await Promise.all((new Array(totalEpisodios)).fill()
         .map(e=>counter++)
@@ -12,16 +13,17 @@ const saveEpisodeList = async ({name, description, imgSrc, publisher, totalEpiso
                     500 * indice)
             })
         })
-    )
+    )*/
 
     //Le aviso al sw que guarde la info de este podcast
     navigator.serviceWorker.controller.postMessage(
         {
             execute:"save",
+            spotifyToken: getSpotifyToken(),
             podcast:{
                 id: podcastId,
-                podcast_data: {name, description, imgSrc, publisher, totalEpisodios, spotifyUri},
-                podcast_episodes: episodes
+                podcast_data: {name, description, imgSrc, publisher, totalEpisodios, spotifyUri}/*,
+                podcast_episodes: episodes*/
         }
     })
 }
