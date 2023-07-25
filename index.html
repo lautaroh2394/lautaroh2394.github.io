@@ -16,14 +16,16 @@
         <div id="nointernet" style="display: none;" class="alert alert-dark" role="alert">
             No hay conexión a internet
         </div>
-        <!--
         <div id="SavedPodcasts" style="display: none;">
             <div class="d-grid gap-2">
                 <button class="btn btn-primary" type="button">Ver guardados</button>
             </div>
         </div>
-        -->
-        <div id="container">
+        <div id="SavedPodcastsList" style="display: none;">
+            <div class="accordion" id="results">
+            </div>
+        </div>
+        <div class="container">
             <div class="modal fade" id="authModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -34,7 +36,7 @@
                             <h4>Necesito que autorices la aplicación para poder ver tus podcasts</h4>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="autorizar">Autorizar</button>
+                            <button type="button" class="btn btn-primary" id="Authorize">Autorizar</button>
                         </div>
                     </div>
                 </div>

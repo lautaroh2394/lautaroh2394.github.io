@@ -93,7 +93,7 @@ h4, span{
     justify-content: center;
 }
 
-#container {
+.container {
     flex: 1;
 }
 

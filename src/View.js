@@ -3,20 +3,20 @@ import { isAuthorized } from './spotify-utils.js';
 const pageModel = {
   start: (_) => {
     pageModel.hideAllBlocks();
+    pageModel.configureSaved();
     pageModel.showLoading();
 
     if (!isAuthorized()) {
       pageModel.askLogin();
     } else {
       pageModel.showSearch();
+      pageModel.hideLoading();
     }
   },
   askLogin: (_) => {
-    pageModel.showSearch();
     pageModel.showAuth();
   },
   showSearch: (_) => {
-    pageModel.hideAllBlocks();
     pageModel.show('#search');
     pageModel.show('#results');
   },
@@ -27,7 +27,7 @@ const pageModel = {
     pageModel.hide('#loading');
   },
   hideAllBlocks: (_) => {
-    [...document.querySelectorAll('body > #container > div')].forEach((block) => {
+    [...document.querySelectorAll('body > .container > div')].forEach((block) => {
       pageModel.hide(block);
     });
   },
@@ -51,8 +51,21 @@ const pageModel = {
   show: (sel) => {
     document.querySelector(sel).style.display = '';
   },
-  toggleOffline: (type) => {
-    if (type === 'offline') pageModel.show('#nointernet');
+  configureSaved: () => {
+    let saved = localStorage.getItem('saved-podcasts');
+    if (!saved) return;
+    pageModel.show('#SavedPodcasts');
+    saved = JSON.parse(saved);
+    saved.items.forEach((podcast) => {
+      // todo
+    });
+  },
+  showSavedPodcasts: () => {
+    pageModel.show('#SavedPodcasts');
+    pageModel.show('#SavedPodcastsList');
+  },
+  toggleOffline: (status) => {
+    if (status === 'offline') pageModel.show('#nointernet');
     else pageModel.hide('#nointernet');
   },
 };
