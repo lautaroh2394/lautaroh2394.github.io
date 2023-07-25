@@ -1,5 +1,6 @@
 import pageModel from './view.js';
 import { spotifySearch, playRandomEpisode } from './spotify-utils.js';
+import { SAVED_PODCASTS } from './constants.js';
 
 const create = ({
   tag, clases, children, attributes, textContent, events,
@@ -19,16 +20,41 @@ const create = ({
   return el;
 };
 
-const addListRow = ({
-  name, description, images, publisher, episodes, uri, id, nroFila, callback,
+const sameId = (id) => (podcastParam) => podcastParam.id === id;
+
+const savePodcastData = (params) => {
+  let saved = JSON.parse(localStorage.getItem(SAVED_PODCASTS)) || [];
+  const sameIdAsPodcast = sameId(params.id);
+  const alreadySaved = saved.some(sameIdAsPodcast);
+  if (alreadySaved) {
+    const index = saved.findIndex(sameIdAsPodcast);
+    saved = [
+      saved.slice(0, index),
+      saved.slice(index, saved.length - 1),
+    ].flat();
+  }
+  saved.push(params);
+  localStorage.setItem(SAVED_PODCASTS, JSON.stringify(saved));
+  return saved;
+};
+const clickPlayCallbackGenerator = (params) => {
+  return async () => {
+    playRandomEpisode(params);
+    const saved = savePodcastData(params);
+    // pageModel.configureSaved(saved); -- todo - bugueadisimo
+  };
+};
+
+const createListRow = ({
+  name, description, images, publisher, episodes, uri, id, nroFila,
 }) => {
   const imgSrc = images.reduce((prevImg, curr) => {
     return curr.height < prevImg.height ? curr : prevImg;
   }).url;
-  callback = callback || ((ev) => playRandomEpisode({
-    name, description, imgSrc, publisher, episodes, uri, id,
-  }));
   nroFila = nroFila || '1';
+  const clickPlayCallback = clickPlayCallbackGenerator({
+    name, description, images, publisher, episodes, uri, id, nroFila,
+  });
   const el = create({
     tag: 'div',
     clases: ['accordion-item'],
@@ -171,7 +197,7 @@ const addListRow = ({
                     },
                     textContent: 'Reproducir aleatorio',
                     events: {
-                      click: callback,
+                      click: clickPlayCallback,
                     },
                   },
                 ],
@@ -195,13 +221,25 @@ const addListRow = ({
       },
     ],
   });
-
-  results.appendChild(el);
-  return (parseInt(nroFila) + 1).toString();
+  return el;
 };
 
-const emptyList = (_) => {
-  [...results.children].forEach((child) => results.removeChild(child));
+const addResult = (params) => {
+  const el = createListRow(params);
+  SearchResults.appendChild(el);
+  return (parseInt(params.nroFila) + 1).toString();
+};
+
+export const addSaved = (params) => {
+  const el = createListRow(params);
+  SavedPodcastsList.appendChild(el);
+  return (parseInt(params.nroFila) + 1).toString();
+};
+
+export const emptyList = (element) => {
+  if (element.children) {
+    [...element.children].forEach((child) => element.removeChild(child));
+  }
 };
 
 const setEvents = (_) => {
@@ -210,7 +248,7 @@ const setEvents = (_) => {
   });
 
   SearchButton.addEventListener('click', async (ev) => {
-    emptyList();
+    emptyList(SearchResults);
     pageModel.showLoading();
 
     const val = SearchInput.value;
@@ -222,7 +260,7 @@ const setEvents = (_) => {
 
     const listaPodcasts = res.shows.items;
     listaPodcasts.reduce((prevPodcastNumber, podcast) => {
-      return addListRow({
+      return addResult({
         ...podcast,
         nroFila: prevPodcastNumber,
         episodes: podcast.total_episodes,
@@ -244,8 +282,11 @@ const setEvents = (_) => {
   });
 
   SavedPodcasts.addEventListener('click', (ev) => {
-    pageModel.hideAllBlocks();
-    pageModel.showSavedPodcasts();
+    pageModel.toggleSavedPodcasts();
+  });
+
+  ShowingSavedPodcasts.addEventListener('click', (ev) => {
+    pageModel.toggleSavedPodcasts();
   });
 };
 
@@ -265,10 +306,8 @@ const setSW = (_) => {
   }
 };
 
-const startPage = (_) => {
+export const startPage = (_) => {
   setEvents();
   // setSW(); //todo
   pageModel.start();
 };
-
-export default startPage;

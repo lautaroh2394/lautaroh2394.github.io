@@ -44,20 +44,8 @@ const getEpisode = async (id, nroEpisodio, token) => {
     return await res.json();
 } */
 
-const saveEpisodeList = () => {
-  // todo
-};
-
-export const playRandomEpisode = async ({
-  name, description, imgSrc, publisher, episodes, spotifyUri, id,
-}) => {
-  const totalEpisodios = episodes;
-  const podcastId = id;
-  saveEpisodeList({
-    name, description, imgSrc, publisher, totalEpisodios, spotifyUri, podcastId,
-  });
-
-  const res = await getRandomEpisode(podcastId, totalEpisodios);
+export const playRandomEpisode = async ({ episodes, id }) => {
+  const res = await getRandomEpisode(id, episodes);
   if (res.error) {
     pageModel.showAuth(res.error.message);
     return;

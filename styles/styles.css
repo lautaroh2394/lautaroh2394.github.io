@@ -61,7 +61,7 @@ h4, span{
         height: 5vw;
     }
 
-    #search{
+    #Search{
         padding: 2%;
     }
 }
@@ -71,7 +71,7 @@ h4, span{
         height: 2.5vw;
     }
 
-    #search{
+    #Search{
         padding: 2%;
         /*width: 80%;*/
         justify-content: center;
@@ -79,7 +79,7 @@ h4, span{
         /*align-items: center;*/
     }
 
-    #search > div {
+    #Search > div {
         width: 80%;
     }
 

@@ -1,7 +1,10 @@
+import { SAVED_PODCASTS } from './constants.js';
 import { isAuthorized } from './spotify-utils.js';
+import { addSaved, emptyList } from './dom-utils.js';
 
 const pageModel = {
   start: (_) => {
+    window.showingSaved = false;
     pageModel.hideAllBlocks();
     pageModel.configureSaved();
     pageModel.showLoading();
@@ -17,8 +20,8 @@ const pageModel = {
     pageModel.showAuth();
   },
   showSearch: (_) => {
-    pageModel.show('#search');
-    pageModel.show('#results');
+    pageModel.show('#Search');
+    pageModel.show('#SearchResults');
   },
   showLoading: (_) => {
     pageModel.show('#loading');
@@ -51,22 +54,38 @@ const pageModel = {
   show: (sel) => {
     document.querySelector(sel).style.display = '';
   },
-  configureSaved: () => {
-    let saved = localStorage.getItem('saved-podcasts');
+  configureSaved: (savedPodcasts) => {
+    let saved = savedPodcasts;
+    if (!saved) saved = localStorage.getItem(SAVED_PODCASTS);
     if (!saved) return;
     pageModel.show('#SavedPodcasts');
-    saved = JSON.parse(saved);
-    saved.items.forEach((podcast) => {
-      // todo
+    emptyList(SavedPodcastsList);
+    if (typeof saved === 'string') saved = JSON.parse(saved);
+    saved.forEach((podcastParams) => {
+      addSaved(podcastParams);
     });
   },
   showSavedPodcasts: () => {
-    pageModel.show('#SavedPodcasts');
+    pageModel.hide('#SavedPodcasts');
     pageModel.show('#SavedPodcastsList');
+    pageModel.show('#ShowingSavedPodcasts');
   },
   toggleOffline: (status) => {
     if (status === 'offline') pageModel.show('#nointernet');
     else pageModel.hide('#nointernet');
+  },
+  toggleSavedPodcasts: () => {
+    window.showingSaved = !window.showingSaved;
+    pageModel.hideAllBlocks();
+
+    if (window.showingSaved) {
+      pageModel.showSavedPodcasts();
+    } else {
+      pageModel.hide('#ShowingSavedPodcasts');
+      pageModel.hide('#SavedPodcastsList');
+      pageModel.show('#SavedPodcasts');
+      pageModel.showSearch();
+    }
   },
 };
 

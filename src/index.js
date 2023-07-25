@@ -1,4 +1,4 @@
-import startPage from './dom-utils.js';
+import { startPage } from './dom-utils.js';
 
 window.addEventListener('load', (ev) => {
   startPage();
