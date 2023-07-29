@@ -1,8 +1,9 @@
 import pageModel from './view.js';
-import { spotifySearch, playRandomEpisode } from './spotify-utils.js';
-import { SAVED_PODCASTS, SPOTIFY_APP_URL } from './constants.js';
+import { spotifySearch, playRandomEpisode, getEpisodes } from './spotify-utils.js';
+import { SAVED_PODCASTS, SPOTIFY_APP_URL, SPOTIFY_MAX_LIMIT } from './constants.js';
 import { SavedItem } from './models/saved-item.js';
 import { AccordionItem } from './models/accordion-item.js';
+import { AccordionEpisode } from './models/accordion-episode.js';
 
 export const create = ({
   tag, classes, children, attributes, textContent, events,
@@ -66,6 +67,14 @@ export const clickPlayCallbackGenerator = (params) => {
     pageModel.configureSaved(saved);
   };
 };
+
+const addFoundEpisodes = (matches)=>{
+  matches.reduce((prevEpisodeFileNumber, episode) => {
+    const el = AccordionEpisode({...episode, prevEpisodeFileNumber})
+    FoundPodcastEpisodes.appendChild(el);
+    return (parseInt(episode.fileNumber) + 1).toString();
+  }, 1);
+}
 
 const addResult = (params) => {
   const el = AccordionItem(params)
@@ -131,7 +140,61 @@ const setEvents = (_) => {
   ShowingSavedPodcasts.addEventListener('click', () => {
     pageModel.toggleSavedPodcasts();
   });
+
+  ReturnToSearch.addEventListener('click', ()=>{
+    const currentState = window.history.state
+    delete currentState.podcast
+    pageModel.hide("#SearchingEpisode")
+    window.history.pushState(currentState, null, '/');
+    pageModel.start()
+  })
+
+  SearchEpisodesButton.addEventListener('click', async ()=>{
+    pageModel.showLoading()
+    emptyList("#FoundPodcastEpisodes")
+    
+    const podcastData = window.history.state.podcast
+    const query = SearchEpisodesInput.value.toLowerCase()
+
+    const matches = await findEpisode(podcastData, query)
+    if (matches.length == 0) {
+      const dialogModal = new bootstrap.Modal(document.getElementById('DialogModal'), {
+        keyboard: true,
+        show: true,
+        backdrop: true,
+      });
+      
+      dialogModal.show();
+      CloseDialogModal.onclick = ()=> dialogModal.hide()
+    }
+    addFoundEpisodes(matches)
+    pageModel.hideLoading()
+    pageModel.show("#FoundPodcastEpisodes")
+  })
+
+  SearchEpisodesInput.addEventListener('keydown', (ev) => {
+    if (ev.keyCode === 13) SearchEpisodesButton.click();
+  });
+
+  SearchingEpisode.addEventListener('click', ()=>{
+    ReturnToSearch.click()
+  })
 };
+
+export const findEpisode = async (params, query) => {
+  const attempts = parseInt(params.episodes / SPOTIFY_MAX_LIMIT)  + 1
+  const results = []
+  for(let offset = 0; offset< attempts; offset++ ){
+    const res = await getEpisodes(params.id, offset * SPOTIFY_MAX_LIMIT)
+    const episodes = res.items
+    const found = episodes.filter(episode => 
+      episode.description.toLowerCase().includes(query) ||
+      episode.name.toLowerCase().includes(query)
+    )
+    results.push(found)
+  }
+  return results.flat()
+}
 
 const setSW = (_) => {
   if ('serviceWorker' in navigator) {

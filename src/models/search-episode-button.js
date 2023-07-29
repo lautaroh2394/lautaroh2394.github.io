@@ -1,9 +1,20 @@
-import { create } from "../dom-utils.js"
+import { create, findEpisode } from "../dom-utils.js"
+import { getSpotifyToken } from "../spotify-utils.js";
+import pageModel from "../view.js";
 
 export const SearchEpisodeButton = (params)=> {
     const clickSearchEpisodeCallback = ()=>{
-        //TODO
+        const currentState = window.history.state
+        window.history.pushState({ 
+            ...currentState,
+            podcast: params,
+         }, 'Búsqueda de capítulo', '/?episode-search');
+        pageModel.hide('#SavedPodcastsList');
+        pageModel.hide('#ShowingSavedPodcasts');
+        pageModel.showEpisodeSearch();
+        pageModel.showSearchingEpisode(params.name)
     };
+
     return create({
         tag: 'div',
         classes: ['accordion-btn'],

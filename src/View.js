@@ -5,8 +5,9 @@ import {
 import { DeleteAllButton } from './models/delete-all-button.js';
 
 const pageModel = {
-  start: (_) => {
+  start: () => {
     window.showingSaved = false;
+    window.pageModel = pageModel;
     pageModel.hideAllBlocks();
     if (getSaved().length > 0 ) pageModel.show('#SavedPodcasts');
     pageModel.configureSaved();
@@ -19,20 +20,25 @@ const pageModel = {
       pageModel.hideLoading();
     }
   },
-  askLogin: (_) => {
+  askLogin: () => {
     pageModel.showAuth();
   },
-  showSearch: (_) => {
+  showEpisodeSearch: (params)=>{
+    pageModel.hideAllBlocks();
+    pageModel.configureSaved();
+    pageModel.show('#SearchEpisodes')
+  },
+  showSearch: () => {
     pageModel.show('#Search');
     pageModel.show('#SearchResults');
   },
-  showLoading: (_) => {
+  showLoading: () => {
     pageModel.show('#loading');
   },
-  hideLoading: (_) => {
+  hideLoading: () => {
     pageModel.hide('#loading');
   },
-  hideAllBlocks: (_) => {
+  hideAllBlocks: () => {
     [...document.querySelectorAll('body > .container > div')].forEach((block) => {
       pageModel.hide(block);
     });
@@ -46,9 +52,9 @@ const pageModel = {
   },
   showAuth: (mje) => {
     if (mje) {
-      document.querySelector('#authModal > .modal-dialog > .modal-content > .modal-body').textContent = mje;
+      document.querySelector('#AuthModal > .modal-dialog > .modal-content > .modal-body').textContent = mje;
     }
-    const authModal = new bootstrap.Modal(document.getElementById('authModal'), {
+    const authModal = new bootstrap.Modal(document.getElementById('AuthModal'), {
       keyboard: false,
       backdrop: 'static',
     });
@@ -92,6 +98,10 @@ const pageModel = {
       pageModel.showSearch();
     }
   },
+  showSearchingEpisode: (name)=> {
+    document.querySelector("#SearchingEpisode > div > button" ).textContent = `Buscando episodio de ${name}`
+    pageModel.show("#SearchingEpisode")
+  }
 };
 
 export default pageModel;

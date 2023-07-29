@@ -58,7 +58,7 @@ h4, span{
         height: 5vw;
     }
 
-    #Search{
+    #Search, #SearchEpisodes {
         padding: 2%;
     }
 }
@@ -68,7 +68,7 @@ h4, span{
         height: 2.5vw;
     }
 
-    #Search{
+    #Search, #SearchEpisodes {
         padding: 2%;
         /*width: 80%;*/
         justify-content: center;
@@ -76,24 +76,28 @@ h4, span{
         /*align-items: center;*/
     }
 
-    #Search > div {
-        width: 80%;
+    #Search, #SearchEpisodes  > div {
+        /*width: 80%;*/
     }
-
-    #resultados {
+/*
+    #resultados, #SearchResults {
         justify-content: center;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
     
-    #resultados > div {
+    #resultados, #SearchResults > div {
         width: 80%;
     }
+    */
 }
 
 #loading {
     justify-content: center;
+    position: absolute;
+    width: 100%;
+    margin-top: 30vh;
 }
 
 .container {
