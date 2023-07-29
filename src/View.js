@@ -1,11 +1,14 @@
-import { SAVED_PODCASTS } from './constants.js';
 import { isAuthorized } from './spotify-utils.js';
-import { addSaved, emptyList } from './dom-utils.js';
+import {
+  addSaved, emptyList,
+} from './dom-utils.js';
+import { DeleteButton, getSaved } from './models.js';
 
 const pageModel = {
   start: (_) => {
     window.showingSaved = false;
     pageModel.hideAllBlocks();
+    if (getSaved().length > 0 ) pageModel.show('#SavedPodcasts');
     pageModel.configureSaved();
     pageModel.showLoading();
 
@@ -54,16 +57,18 @@ const pageModel = {
   show: (sel) => {
     document.querySelector(sel).style.display = '';
   },
-  configureSaved: (savedPodcasts) => {
-    let saved = savedPodcasts;
-    if (!saved) saved = localStorage.getItem(SAVED_PODCASTS);
-    if (!saved) return;
-    pageModel.show('#SavedPodcasts');
+  configureSaved: () => {
+    const saved = getSaved();
     emptyList(SavedPodcastsList);
-    if (typeof saved === 'string') saved = JSON.parse(saved);
-    saved.forEach((podcastParams) => {
-      addSaved(podcastParams);
+    if (saved.length === 0) return;
+
+    saved.forEach((podcastParams, index) => {
+      addSaved({ ...podcastParams, fileNumber: index });
     });
+    if (saved.length > 0) {
+      SavedPodcastsList.appendChild(DeleteButton());
+      if (!showingSaved) pageModel.show('#SavedPodcasts');
+    }
   },
   showSavedPodcasts: () => {
     pageModel.hide('#SavedPodcasts');
@@ -83,7 +88,7 @@ const pageModel = {
     } else {
       pageModel.hide('#ShowingSavedPodcasts');
       pageModel.hide('#SavedPodcastsList');
-      pageModel.show('#SavedPodcasts');
+      if (getSaved().length > 0 ) pageModel.show('#SavedPodcasts');
       pageModel.showSearch();
     }
   },
