@@ -22,6 +22,7 @@
         "radix":"off",
         "prefer-destructuring":"off",
         "no-return-assign":"off",
-        "arrow-body-style": "off"
+        "arrow-body-style": "off",
+        "prefer-default-export": false
     }
 }
