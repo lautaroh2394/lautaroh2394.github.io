@@ -65,18 +65,26 @@ const clickPlayCallbackGenerator = (params) => {
   };
 };
 
-export const DeleteButton = () => {
+export const DeleteAllButton = () => {
+    
   return create({
-    tag: 'button',
-    classes: ['btn', 'btn-alert'],
-    attributes: { id: 'DeleteAllSaved' },
-    textContent: 'Borrar todos',
-    events: {
-      click: () => {
-        localStorage.setItem(SAVED_PODCASTS, '[]');
-        pageModel.configureSaved();
-      },
-    },
+    tag: "div",
+    classes: ["accordion-btn"],
+    children: [
+        {
+            tag: 'button',
+            classes: ['btn', 'btn-danger'],
+            attributes: { id: 'DeleteAllSaved' },
+            textContent: 'Borrar todos',
+            events: {
+              click: () => {
+                localStorage.setItem(SAVED_PODCASTS, '[]');
+                pageModel.configureSaved();
+              },
+            },
+          }
+    ],
+    attributes: {type: "button"}
   });
 };
 
@@ -171,18 +179,26 @@ const AccordionBody = (params) => {
               AccordionDetails(params),
               AccordionButtons(params),
               AccordionDescription(params),
-            ],
+            ].flat(),
           },
         ],
       })
 }
 
 const AccordionButtons = (params)=> {
-    const {deleteOption, id} = params
+    const {deleteOption} = params
+    const buttons =  [
+        PlayRandomButton(params),
+    ]
+    if (deleteOption) buttons.push( DeleteSavedButton(params))
+    return buttons
+}
+
+const PlayRandomButton = (params)=> {
     const clickPlayCallback = clickPlayCallbackGenerator(params);
     return create({
         tag: 'div',
-        classes: ['play-random'],
+        classes: ['accordion-btn'],
         children: [
           {
             tag: 'button',
@@ -197,12 +213,21 @@ const AccordionButtons = (params)=> {
             events: {
               click: clickPlayCallback,
             },
-          },
+          }]})
+}
+
+const DeleteSavedButton = (params)=>{
+    const {deleteOption, id} = params
+    const clickPlayCallback = clickPlayCallbackGenerator(params);
+    return create({
+        tag: 'div',
+        classes: ['accordion-btn'],
+        children: [
           deleteOption ? {
             tag: 'button',
             classes: [
               'btn',
-              'btn-error',
+              'btn-danger',
             ],
             attributes: {
               type: 'button',
@@ -212,10 +237,9 @@ const AccordionButtons = (params)=> {
               click: deleteFromSavedCallbackGenerator(id),
             },
           } : undefined,
-        ].filter((child) => child),
+        ]
       })
 }
-
 const AccordionDetails = ({imgSrc, name, publisher, episodes}) => {
     return create({
         tag: 'div',

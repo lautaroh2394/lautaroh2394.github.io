@@ -1,7 +1,7 @@
 import pageModel from './view.js';
 import { spotifySearch, playRandomEpisode } from './spotify-utils.js';
 import { SAVED_PODCASTS, SPOTIFY_APP_URL } from './constants.js';
-import { AccordionItem, DeleteButton, SavedItem } from './models.js';
+import { AccordionItem, DeleteAllButton, SavedItem } from './models.js';
 
 const addResult = (params) => {
   const el = AccordionItem(params)

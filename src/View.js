@@ -2,7 +2,7 @@ import { isAuthorized } from './spotify-utils.js';
 import {
   addSaved, emptyList,
 } from './dom-utils.js';
-import { DeleteButton, getSaved } from './models.js';
+import { DeleteAllButton, getSaved } from './models.js';
 
 const pageModel = {
   start: (_) => {
@@ -66,7 +66,7 @@ const pageModel = {
       addSaved({ ...podcastParams, fileNumber: index });
     });
     if (saved.length > 0) {
-      SavedPodcastsList.appendChild(DeleteButton());
+      SavedPodcastsList.appendChild(DeleteAllButton());
       if (!showingSaved) pageModel.show('#SavedPodcasts');
     }
   },
