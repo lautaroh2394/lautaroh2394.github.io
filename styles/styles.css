@@ -46,7 +46,7 @@ h4, span{
     padding: 0 1em;
 }
 
-.play-random{
+.accordion-btn{
     display: flex;
     flex-direction: column;
     width: 100%;

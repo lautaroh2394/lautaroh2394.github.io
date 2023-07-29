@@ -1,7 +1,71 @@
 import pageModel from './view.js';
 import { spotifySearch, playRandomEpisode } from './spotify-utils.js';
 import { SAVED_PODCASTS, SPOTIFY_APP_URL } from './constants.js';
-import { AccordionItem, DeleteAllButton, SavedItem } from './models.js';
+import { SavedItem } from './models/saved-item.js';
+import { AccordionItem } from './models/accordion-item.js';
+
+export const create = ({
+  tag, classes, children, attributes, textContent, events,
+}) => {
+  const el = document.createElement(tag);
+  if (classes) classes.forEach((clase) => el.classList.add(clase));
+  if (children) children.forEach((child) => {
+    const appendable = child instanceof HTMLElement ? child : create(child)
+    el.append(appendable)
+  });
+  if (attributes) {
+    Object.keys(attributes).forEach((attrKey) => el.setAttribute(attrKey, attributes[attrKey]));
+  }
+  if (textContent) (el.textContent = textContent);
+  if (events) {
+    Object.keys(events).forEach((event) => {
+      el.addEventListener(event, events[event]);
+    });
+  }
+  return el;
+};
+
+const sameId = (id) => (podcastParam) => podcastParam.id === id;
+const updateSaved = (saved) => {
+  localStorage.setItem(SAVED_PODCASTS, JSON.stringify(saved));
+  return saved;
+};
+export const getSaved = () => JSON.parse(localStorage.getItem(SAVED_PODCASTS)) || [];
+const deleteAndReturnUpdated = (id) => {
+  let saved = getSaved();
+  const index = saved.findIndex((podcast) => podcast.id === id);
+  saved = [
+    saved.slice(0, index),
+    saved.slice(index + 1, saved.length),
+  ].flat();
+  updateSaved(saved);
+  return getSaved();
+};
+export const deleteFromSavedCallbackGenerator = (id) => {
+  return () => {
+    const saved = deleteAndReturnUpdated(id);
+    updateSaved(saved);
+    pageModel.configureSaved(saved);
+  };
+};
+const savePodcastData = (params) => {
+  let saved = getSaved();
+  const sameIdAsPodcast = sameId(params.id);
+  const alreadySaved = saved.some(sameIdAsPodcast);
+  if (alreadySaved) {
+    saved = deleteAndReturnUpdated(params.id);
+  }
+  saved.push(params);
+  return updateSaved(saved);
+};
+
+export const clickPlayCallbackGenerator = (params) => {
+  return async () => {
+    playRandomEpisode(params);
+    const saved = savePodcastData(params);
+    pageModel.configureSaved(saved);
+  };
+};
 
 const addResult = (params) => {
   const el = AccordionItem(params)

@@ -1,8 +1,8 @@
 import { isAuthorized } from './spotify-utils.js';
 import {
-  addSaved, emptyList,
+  addSaved, emptyList, getSaved
 } from './dom-utils.js';
-import { DeleteAllButton, getSaved } from './models.js';
+import { DeleteAllButton } from './models/delete-all-button.js';
 
 const pageModel = {
   start: (_) => {
