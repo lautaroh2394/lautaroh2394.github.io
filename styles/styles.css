@@ -46,9 +46,6 @@ h4, span{
     padding: 0 1em;
 }
 
-.accordion-item-descripcion{
-}
-
 .play-random{
     display: flex;
     flex-direction: column;
