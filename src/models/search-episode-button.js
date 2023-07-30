@@ -1,6 +1,6 @@
 import { create, findEpisode } from "../dom-utils.js"
 import { getSpotifyToken } from "../spotify-utils.js";
-import pageModel from "../view.js";
+import pageModel from "../view.dup.js";
 
 export const SearchEpisodeButton = (params)=> {
     const clickSearchEpisodeCallback = ()=>{
