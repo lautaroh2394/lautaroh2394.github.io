@@ -1,0 +1,11 @@
+- view y dom utils tienen responsabilidades similares
+- usar el history api para mejorar la estructura de la view.
+    - /search -> mostrar search
+    - /saved -> mostrar guardados
+    - /search/{podcastId} -> buscar palabras en twxtos de capitulos de podcast
+- usar la history api state para guardar el token de spotify
+- armar {path}.html que redireccionen al index con los params correspondientes para que se dibuje correctamente la pag
+- mudar a otro repo (para que quede libre el github.io)
+- configurar netlify para que use ese repo
+- comprar dominio podcast.random o algo así
+- que los params tengan valor para poder entrar de una compartiendo la url
