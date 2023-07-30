@@ -26,44 +26,43 @@ export const create = ({
   return el;
 };
 
-const sameId = (id) => (podcastParam) => podcastParam.id === id;
-const updateSaved = (saved) => {
+const save = (saved) => {
   localStorage.setItem(SAVED_PODCASTS, JSON.stringify(saved));
   return saved;
 };
-export const getSaved = () => JSON.parse(localStorage.getItem(SAVED_PODCASTS)) || [];
-const deleteAndReturnUpdated = (id) => {
-  let saved = getSaved();
+export const getAllSavedPodcasts = () => JSON.parse(localStorage.getItem(SAVED_PODCASTS)) || [];
+
+const deleteById = (id) => {
+  let saved = getAllSavedPodcasts();
   const index = saved.findIndex((podcast) => podcast.id === id);
-  saved = [
+  const updated  = [
     saved.slice(0, index),
     saved.slice(index + 1, saved.length),
   ].flat();
-  updateSaved(saved);
-  return getSaved();
+  return updated;
 };
+
 export const deleteFromSavedCallbackGenerator = (id) => {
   return () => {
-    const saved = deleteAndReturnUpdated(id);
-    updateSaved(saved);
-    pageModel.configureSaved(saved);
+    const updated = deleteById(id);
+    save(updated);
+    pageModel.configureSaved(updated);
   };
 };
-const savePodcastData = (params) => {
-  let saved = getSaved();
-  const sameIdAsPodcast = sameId(params.id);
-  const alreadySaved = saved.some(sameIdAsPodcast);
+const savePodcast = (podcast) => {
+  let updated = getAllSavedPodcasts();
+  const alreadySaved = updated.some((id) => (podcastParam) => podcastParam.id === id);
   if (alreadySaved) {
-    saved = deleteAndReturnUpdated(params.id);
+    updated = deleteById(podcast.id);
   }
-  saved.push(params);
-  return updateSaved(saved);
+  updated.push(podcast);
+  return save(updated);
 };
 
 export const clickPlayCallbackGenerator = (params) => {
   return async () => {
     playRandomEpisode(params);
-    const saved = savePodcastData(params);
+    const saved = savePodcast(params);
     pageModel.configureSaved(saved);
   };
 };

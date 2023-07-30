@@ -1,6 +1,6 @@
 import { isAuthorized } from './spotify-utils.js';
 import {
-  addSaved, emptyList, getSaved
+  addSaved, emptyList, getAllSavedPodcasts
 } from './dom-utils.js';
 import { DeleteAllButton } from './models/delete-all-button.js';
 
@@ -9,7 +9,7 @@ const pageModel = {
     window.showingSaved = false;
     window.pageModel = pageModel;
     pageModel.hideAllBlocks();
-    if (getSaved().length > 0 ) pageModel.show('#SavedPodcasts');
+    if (getAllSavedPodcasts().length > 0 ) pageModel.show('#SavedPodcasts');
     pageModel.configureSaved();
     pageModel.showLoading();
 
@@ -63,7 +63,7 @@ const pageModel = {
     document.querySelector(sel).style.display = '';
   },
   configureSaved: () => {
-    const saved = getSaved();
+    const saved = getAllSavedPodcasts();
     emptyList(SavedPodcastsList);
     if (saved.length === 0) return;
 
@@ -93,7 +93,7 @@ const pageModel = {
     } else {
       pageModel.hide('#ShowingSavedPodcasts');
       pageModel.hide('#SavedPodcastsList');
-      if (getSaved().length > 0 ) pageModel.show('#SavedPodcasts');
+      if (getAllSavedPodcasts().length > 0 ) pageModel.show('#SavedPodcasts');
       pageModel.showSearch();
     }
   },
