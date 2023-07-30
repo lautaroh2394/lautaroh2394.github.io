@@ -11,6 +11,7 @@ export const SearchEpisodeButton = (params)=> {
          }, 'Búsqueda de capítulo', '/?episode-search');
         pageModel.hide('#SavedPodcastsList');
         pageModel.hide('#ShowingSavedPodcasts');
+        pageModel.hide('#SavedPodcasts');
         pageModel.showEpisodeSearch();
         pageModel.showSearchingEpisode(params.name)
     };

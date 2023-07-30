@@ -25,7 +25,6 @@ const pageModel = {
   },
   showEpisodeSearch: (params)=>{
     pageModel.hideAllBlocks();
-    pageModel.configureSaved();
     pageModel.show('#SearchEpisodes')
   },
   showSearch: () => {
