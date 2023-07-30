@@ -70,9 +70,9 @@ export const clickPlayCallbackGenerator = (params) => {
 
 const addFoundEpisodes = (matches)=>{
   matches.reduce((prevEpisodeFileNumber, episode) => {
-    const el = AccordionEpisode({...episode, prevEpisodeFileNumber})
+    const el = AccordionEpisode({...episode, fileNumber: prevEpisodeFileNumber})
     FoundPodcastEpisodes.appendChild(el);
-    return (parseInt(episode.fileNumber) + 1).toString();
+    return prevEpisodeFileNumber + 1;
   }, 1);
 }
 
@@ -151,7 +151,7 @@ const setEvents = (_) => {
 
   SearchEpisodesButton.addEventListener('click', async ()=>{
     pageModel.showLoading()
-    emptyList("#FoundPodcastEpisodes")
+    emptyList(FoundPodcastEpisodes)
     
     const podcastData = window.history.state.podcast
     const query = SearchEpisodesInput.value.toLowerCase()

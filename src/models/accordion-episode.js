@@ -2,6 +2,7 @@ import { create } from "../dom-utils.js"
 import { AccordionBody } from "./accordion-body.js";
 import { AccordionDescription } from "./accordion-description.js";
 import { AccordionDetails } from "./accordion-details.js";
+import { AccordionEpisodeHeader } from "./accordion-header copy.js";
 import { AccordionHeader } from "./accordion-header.js";
 import { PlayEpisodeButton } from "./play-episode-button.js";
 
@@ -16,7 +17,7 @@ export const AccordionEpisode = (params) => {
         tag: 'div',
         classes: ['accordion-item'],
         children: [
-          AccordionHeader(params),
+          AccordionEpisodeHeader(params),
           AccordionEpisodeBody(params),
         ],
       });
