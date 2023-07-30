@@ -9,3 +9,4 @@
 - configurar netlify para que use ese repo
 - comprar dominio podcast.random o algo así
 - que los params tengan valor para poder entrar de una compartiendo la url
+- que cuando se vuelva atrás (cel) se clickee volver o lo que corresponda
