@@ -1,4 +1,4 @@
-import pageModel from './view.dup.js';
+import pageModel from './view.js';
 import { SPOTIFY_MAX_LIMIT, SPOTIFY_TOKEN_DETAILS } from './constants.js';
 
 const getSpotifyParams = () => {
